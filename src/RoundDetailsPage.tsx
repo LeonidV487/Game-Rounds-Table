@@ -38,28 +38,28 @@ const RoundDetailsPage: React.FC = () => {
     }
 
     return (
-        <div className="grid grid-cols-5 bg-gray-200" style={{ gridAutoRows: roundDetails.height }}>
-            {rows.flat().map((item, index) => (
+      <div className="grid grid-cols-5 bg-gray-200" style={{ gridAutoRows: roundDetails.height }}>
+        {rows.flat().map((item, index) => (
+          <div
+            key={index}
+            className={`flex justify-center border-2 border-black p-2 ${
+              (index + 1) % 5 !== 0 ? 'border-r-0' : ''} ${
+              index < 15 ? 'border-b-0' : ''}`}
+          >
+            <img src={`/images/${item}.png`} className="w-14 h-14" />
+          </div>
+        ))}
+        {rows.flat().length < 20 &&
+          Array.from({ length: 20 - rows.flat().length }).map((_, emptyIndex) => (
             <div
-                key={index}
-                className={`border-2 border-black p-2 text-center ${
-                (index + 1) % 5 !== 0 ? 'border-r-0' : ''} ${
-                index < 15 ? 'border-b-0' : ''}`}
-            >
-                {item}
-            </div>
-            ))}
-            {rows.flat().length < 20 &&
-            Array.from({ length: 20 - rows.flat().length }).map((_, emptyIndex) => (
-                <div
-                key={`empty-${emptyIndex}`}
-                className={`border-2 border-gray-300 p-2 text-center ${
-                    (rows.flat().length + emptyIndex + 1) % 5 !== 0 ? 'border-r-0' : ''} ${
-                    rows.flat().length + emptyIndex < 15 ? 'border-b-0' : ''}`}
-                />
-            ))}
-        </div>
-      );
+              key={`empty-${emptyIndex}`}
+              className={`border-2 border-gray-300 p-2 text-center ${
+                (rows.flat().length + emptyIndex + 1) % 5 !== 0 ? 'border-r-0' : ''} ${
+                rows.flat().length + emptyIndex < 15 ? 'border-b-0' : ''}`}
+            />
+          ))}
+      </div>
+    );
   };
 
   return (
