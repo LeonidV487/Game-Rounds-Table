@@ -1,31 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React from 'react';
+import { IRoundDetailsPage } from './types';
 
-interface RoundDetails {
-  id: string;
-  height: string;
-  items: string;
-}
-
-const RoundDetailsPage: React.FC = () => {
-  const { roundId } = useParams<{ roundId: string }>();
-  const [roundDetails, setRoundDetails] = useState<RoundDetails | null>(null);
-
-  useEffect(() => {
-    const fetchRoundDetails = async () => {
-      const response = await fetch(`https://60f7b35b9cdca00017454f5e.mockapi.io/api/v1/round/${roundId}`);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const data: RoundDetails = await response.json();
-      setRoundDetails(data);
-    };
-
-    if (roundId) {
-      fetchRoundDetails();
-    }
-  }, [roundId]);
-
+const RoundDetailsPage: React.FC<IRoundDetailsPage> = ({roundDetails}) => {
+ 
   const renderTable = () => {
     if (!roundDetails) return null;
 
@@ -97,15 +74,9 @@ const RoundDetailsPage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
-      {roundDetails ? (
         <div className="p-4 border rounded shadow-md">
-          <h2 className="text-lg font-semibold">Round Details</h2>
-          <p>ID: {roundDetails.id}</p>
-          {renderTable()}
+            {renderTable()}
         </div>
-      ) : (
-        <p>Loading...</p>
-      )}
     </div>
   );
 };

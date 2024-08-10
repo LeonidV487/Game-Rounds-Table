@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import RoundDetailsPage from './RoundDetailsPage';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -12,11 +11,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element:  <App />,
-  },
-  {
-    path: "rounds/:roundId",
-    element: <RoundDetailsPage />,
-  },
+  }
 ]);
 
 
