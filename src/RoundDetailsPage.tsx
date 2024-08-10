@@ -30,35 +30,68 @@ const RoundDetailsPage: React.FC = () => {
     if (!roundDetails) return null;
 
     const itemsArray = roundDetails.items.split(',');
-    const rows: any[] = [];
+    const rows: string[][] = [];
 
     for (let i = 0; i < itemsArray.length; i += 5) {
-      const rowItems = itemsArray.slice(i, i + 5);
-      rows.push(rowItems);
+      rows.push(itemsArray.slice(i, i + 5));
     }
 
+    const getMergedRowSpans = (rowIndex: number, itemIndex: number): number => {
+      let span = 1;
+      while (rowIndex + span < rows.length && rows[rowIndex + span][itemIndex] === '4') {
+        span++;
+      }
+      return span;
+    };
+
+    const renderedRowSpans: { [key: string]: boolean } = {};
+
     return (
-      <div className="grid grid-cols-5 bg-gray-200" style={{ gridAutoRows: roundDetails.height }}>
-        {rows.flat().map((item, index) => (
-          <div
-            key={index}
-            className={`flex justify-center border-2 border-black p-2 ${
-              (index + 1) % 5 !== 0 ? 'border-r-0' : ''} ${
-              index < 15 ? 'border-b-0' : ''}`}
-          >
-            <img src={`/images/${item}.png`} className="w-14 h-14" />
-          </div>
-        ))}
-        {rows.flat().length < 20 &&
-          Array.from({ length: 20 - rows.flat().length }).map((_, emptyIndex) => (
-            <div
-              key={`empty-${emptyIndex}`}
-              className={`border-2 border-gray-300 p-2 text-center ${
-                (rows.flat().length + emptyIndex + 1) % 5 !== 0 ? 'border-r-0' : ''} ${
-                rows.flat().length + emptyIndex < 15 ? 'border-b-0' : ''}`}
-            />
+      <table className="table-fixed w-full border-collapse border-2 border-black">
+        <tbody>
+          {rows.map((row, rowIndex) => (
+            <tr key={rowIndex} className="bg-gray-200">
+              {row.map((item, itemIndex) => {
+                const key = `${rowIndex}-${itemIndex}`;
+                if (item === '4' && !renderedRowSpans[key]) {
+                  const rowSpan = getMergedRowSpans(rowIndex, itemIndex);
+                  renderedRowSpans[key] = true;
+
+                  for (let i = 1; i < rowSpan; i++) {
+                    renderedRowSpans[`${rowIndex + i}-${itemIndex}`] = true;
+                  }
+
+                  return (
+                    <td
+                      key={itemIndex}
+                      rowSpan={rowSpan}
+                      className={`p-2 ${rowSpan > 1 ? 'bg-gray-400' : 'bg-gray-200' } border-2 border-black text-center ${
+                        itemIndex < 4 ? 'border-r-0' : ''
+                      } ${rowIndex + rowSpan - 1 < rows.length - 1 ? 'border-b-0' : ''}`}
+                      style={{ height: roundDetails.height }}
+                    >
+                      <img src={`/images/${item}.png`} className="w-14 h-14 mx-auto" />
+                    </td>
+                  );
+                } else if (!renderedRowSpans[key]) {
+                  return (
+                    <td
+                      key={itemIndex}
+                      className={`p-2 border-2 border-black text-center ${
+                        itemIndex < 4 ? 'border-r-0' : ''
+                      } ${rowIndex < rows.length - 1 ? 'border-b-0' : ''}`}
+                      style={{ height: roundDetails.height }}
+                    >
+                      <img src={`/images/${item}.png`} className="w-14 h-14 mx-auto" />
+                    </td>
+                  );
+                }
+                return null;
+              })}
+            </tr>
           ))}
-      </div>
+        </tbody>
+      </table>
     );
   };
 
