@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface Round {
   roundId: string;
@@ -7,6 +8,7 @@ interface Round {
 
 const App: React.FC = () => {
   const [rounds, setRounds] = useState<Round[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRounds = async () => {
@@ -21,8 +23,6 @@ const App: React.FC = () => {
     fetchRounds();
   }, []);
 
-  console.log(rounds);
-
   const getDate = (timestamp: string) => {
     const date = new Date(timestamp);
     return date.toLocaleString('en-US', {
@@ -35,6 +35,10 @@ const App: React.FC = () => {
       hour12: true
     });
   };
+  
+  const handleRoundClick = (roundId: string) => {
+    navigate(`/rounds/${roundId}`);
+  };
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
@@ -44,7 +48,11 @@ const App: React.FC = () => {
       </div>
       <div className="grid grid-cols-1 gap-4">
         {rounds.map(round => (
-          <div key={round.roundId} className="p-4 border rounded shadow-md flex items-center justify-between">
+          <div 
+            key={round.roundId} 
+            className="p-4 border rounded shadow-md flex items-center justify-between"
+            onClick={() => handleRoundClick(round.roundId)}
+          >
             <div className="flex-1 text-center">
               {round.roundId}
             </div>
