@@ -47,7 +47,11 @@ const RoundDetailsPage: React.FC<IRoundDetailsPage> = ({roundDetails}) => {
                       } ${rowIndex + rowSpan - 1 < rows.length - 1 ? 'border-b-0' : ''}`}
                       style={{ height: roundDetails.height }}
                     >
-                      <img src={`/images/${item}.png`} className="w-14 h-14 mx-auto" />
+                      <img 
+                        src={`/images/${item}.png`} 
+                        className="w-14 h-14 mx-auto" 
+                        alt="icon"
+                      />
                     </td>
                   );
                 } else if (!renderedRowSpans[key]) {
@@ -59,7 +63,11 @@ const RoundDetailsPage: React.FC<IRoundDetailsPage> = ({roundDetails}) => {
                       } ${rowIndex < rows.length - 1 ? 'border-b-0' : ''}`}
                       style={{ height: roundDetails.height }}
                     >
-                      <img src={`/images/${item}.png`} className="w-14 h-14 mx-auto" />
+                      <img 
+                        src={`/images/${item}.png`}
+                        className="w-14 h-14 mx-auto"
+                        alt="icon"
+                      />
                     </td>
                   );
                 }
